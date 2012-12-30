@@ -1,0 +1,38 @@
+{
+  Height:
+  {
+    factoryStart: 52.16,
+    factoryEnd: 52.16,
+    particleEnd: 0
+  },
+  Alpha:
+  {
+    factoryStart: 0.5,
+    factoryEnd: 0.5,
+    particleEnd: 0
+  },
+  X:
+  {
+    factoryStart: 160,
+    factoryEnd: 160,
+    particleEnd: 0
+  },
+  Y:
+  {
+    factoryStart: 120,
+    factoryEnd: 120,
+    particleEnd: 0
+  },
+  Angle:
+  {
+    factoryStart: 180,
+    factoryEnd: 180,
+    particleEnd: 0
+  },
+  Speed:
+  {
+    factoryStart: 5,
+    factoryEnd: 5,
+    particleEnd: 0
+  }
+}

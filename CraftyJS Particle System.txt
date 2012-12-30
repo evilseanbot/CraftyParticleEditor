@@ -1,0 +1,36 @@
+Particle System:
+
+(Treat as single emitter for now.)
+
+BEHAVIOR:
+- Can be attached to an object.
+- Can be moved like any other object.
+
+ATTRIBUITES:
+- Array of Particle Images
+
+MUTABLE ATTRIBUITES: (Minimum Starting, Maximum Starting, Minimum Ending, Maximum Ending)
+- Angle
+- Speed
+- Origin X
+- Origin Y
+- Origin Z
+- Image Rotation
+- Alpha
+- Gravity
+
+==============================
+
+Particle Editor
+
+WHAT IS IT:
+
+- A class.
+- A web site w/ Particle Designer. (Exports to .json files)
+
+==============================
+
+Places to add variables:
+
+- Inside the class itself.
+- In the instruction for adding particle systems.

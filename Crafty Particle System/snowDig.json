@@ -1,0 +1,86 @@
+{
+    "Height": {
+        "FactoryStart": {
+            "Min": 0.48,
+            "Max": 0.48
+        },
+        "FactoryEnd": {
+            "Min": 0.56,
+            "Max": 0.56
+        },
+        "ParticleEnd": {
+            "Min": 14.079999999999998,
+            "Max": 14.079999999999998
+        }
+    },
+    "Alpha": {
+        "FactoryStart": {
+            "Min": 0.9375,
+            "Max": 0.9375
+        },
+        "FactoryEnd": {
+            "Min": 0.9375,
+            "Max": 0.9375
+        },
+        "ParticleEnd": {
+            "Min": -0.91,
+            "Max": -0.91
+        }
+    },
+    "X": {
+        "FactoryStart": {
+            "Min": -18.400000000000006,
+            "Max": -4
+        },
+        "FactoryEnd": {
+            "Min": -18.400000000000006,
+            "Max": -4
+        },
+        "ParticleEnd": {
+            "Min": 0,
+            "Max": 0
+        }
+    },
+    "Y": {
+        "FactoryStart": {
+            "Min": -16.200000000000003,
+            "Max": -6.6000000000000085
+        },
+        "FactoryEnd": {
+            "Min": -16.200000000000003,
+            "Max": -6.6000000000000085
+        },
+        "ParticleEnd": {
+            "Min": 0,
+            "Max": 0
+        }
+    },
+    "Angle": {
+        "FactoryStart": {
+            "Min": 262.8,
+            "Max": 262.8
+        },
+        "FactoryEnd": {
+            "Min": 262.8,
+            "Max": 262.8
+        },
+        "ParticleEnd": {
+            "Min": 0,
+            "Max": 0
+        }
+    },
+    "Speed": {
+        "FactoryStart": {
+            "Min": 2.64,
+            "Max": 2.64
+        },
+        "FactoryEnd": {
+            "Min": 2.62,
+            "Max": 2.62
+        },
+        "ParticleEnd": {
+            "Min": -2.06,
+            "Max": -2.06
+        }
+    }
+}

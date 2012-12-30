@@ -1,0 +1,20 @@
+Features to add:
+=============================================
+* Sprites!
+* Sprite Animations!
+* Different Height/Width
+* Export to .json! {This would actually allow you to use it in the Comp.}
+  - You have this in the json button, but you need to add quotes around any words.
+* Import from .json! {This would actually allow you to use it in the Comp.}
+  - You just got the ajax to be successful, now looad the data.
+* Sprite Color support!
+* Random+Shifting Sliders
+* Velocity Sliders {May extend upon ability to handle}
+* Changeable backgrounds
+* Multiple emitters.
+* Zoomable button!
+* Save to site.
+* Organization of site systems:
+  - Search system.
+  - Tag system
+  - Ratings

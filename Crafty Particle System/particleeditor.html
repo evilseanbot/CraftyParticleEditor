@@ -1,0 +1,105 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>Crafty Particle Editor</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>        
+        <script src="crafty.js" type="text/javascript"></script> 
+        <script src="ParticleSystem.js" type="text/javascript"></script>                         
+        <script src="particleeditor.js" type="text/javascript"></script>                 
+        <script src="SpriteColor.js" type="text/javascript"></script>                                 
+        <style>
+            .setterDiv {
+                border: 1px solid black;
+                width: 400px;
+            }
+            
+            .fullKnob {
+                height: 20px;
+                width: 20px;
+                border: 2px solid black;
+                left: 180px;
+                top: -5px;
+                position: relative;
+                background-color: white;
+            }
+            
+            .minKnob {
+                height: 20px;
+                width: 10px;
+                border: 2px solid black;
+                border-right: 2px solid red;
+                left: 180px;
+                top: -5px;
+                position: relative;
+                background-color: white;
+            }            
+            
+            .maxKnob {
+                height: 20px;
+                width: 10px;
+                border: 2px solid black;
+                border-left: 2px solid red;
+                left: 190px;
+                top: -29px;
+                position: relative;
+                background-color: white;
+            }                        
+            
+            .spot {
+                height: 5px;
+                width: 10px;
+                background-color: #888888;
+                position: relative;
+                margin: 0px;
+            }
+            
+            .blueSpot {
+                height: 5px;
+                width: 5px;
+                background-color: black;
+                position: relative;
+                margin: 0px;
+            }
+            
+            
+            .slider {
+                background-color: #eeeeff;
+                height: 30px;
+                width: 400px;
+            }
+            
+            .betweenSlider {
+                height: 30px;
+            }
+                        
+            #cr-stage {
+               float: left;
+               display: inline;
+               margin-left: 50px;
+            }
+            
+            #setters {
+               float: left;
+               display: inline;
+               width: 400px;
+            }
+            
+            #container {
+               width: 1200px;
+            }
+        </style>
+    </head> 
+    <body> 
+        <div id='container'>
+            <div id='setters'>
+
+                <br>Emits per Second: <input type='text' class='setter' id='emitsPerSecond' value='10'></input>
+                <br>Particle Lifetime (in frames): <input type='text' class='setter' id='particleTimeToLive' value='60'></input>                                
+            </div>
+            
+            <button id='play'>PLAY</button>
+            <button id='stop'>STOP</button>
+            <button id='json'>JSON FILE</button>
+            <div id='jsoncode' style='display: none; float: left'></div>
+    </body> 
+</html>
