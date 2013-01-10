@@ -48,25 +48,27 @@ return RGB;
 };
 
 Crafty.c("Particle", {
-    timeToLive: 60,
-    lifeTime: 0.00,
+    framesExisted: 0,
+    lifetime: 60,
     init: function() {    
       this.bind("EnterFrame", function() {
 
 
-        var delta = (this.AngleEnd - this.AngleStart) / this.timeToLive;         
+      
+        // Should eventually make this serialized, like the mutables.
+        var delta = (this.AngleEnd - this.AngleStart) / this.lifetime;         
         this.AngleCurrent += delta;
         
-        var delta = (this.SpeedEnd - this.SpeedStart) / this.timeToLive;         
+        var delta = (this.SpeedEnd - this.SpeedStart) / this.lifetime;         
         this.SpeedCurrent += delta;
 
-        var delta = (this.HueEnd - this.HueStart) / this.timeToLive;         
+        var delta = (this.HueEnd - this.HueStart) / this.lifetime;         
         this.HueCurrent += delta;
 
-        var delta = (this.SaturationEnd - this.SaturationStart) / this.timeToLive;         
+        var delta = (this.SaturationEnd - this.SaturationStart) / this.lifetime;         
         this.SaturationCurrent += delta;
 
-        var delta = (this.BrightnessEnd - this.BrightnessStart) / this.timeToLive;         
+        var delta = (this.BrightnessEnd - this.BrightnessStart) / this.lifetime;         
         this.BrightnessCurrent += delta;
         
         var hsvColor = hsv2rgb(this.HueCurrent, this.SaturationCurrent, this.BrightnessCurrent);
@@ -75,18 +77,15 @@ Crafty.c("Particle", {
         var green = hsvColor["green"].toString(16);
         var blue = hsvColor["blue"].toString(16);
                 
-        this.color("#" + red + "" + green + "" + blue);
-        
+        //this.color("#" + red + "" + green + "" + blue);
         
         var radToDegrees = 57.2957795;
         this._movement.x = Math.cos(this.AngleCurrent/radToDegrees)*this.SpeedCurrent;
         this._movement.y = Math.sin(this.AngleCurrent/radToDegrees)*this.SpeedCurrent;
-        
-        //console.log("Particle z: " + this.z + "Particle x: " + this.x + "Particle y: " + this.y);
-        
-        this.lifeTime++;              
-        
-        if (this.lifeTime >= this.timeToLive) {
+                
+        this.framesExisted++;              
+                
+        if (this.framesExisted >= this.lifetime) {
           this.destroy();
         }
       });      
@@ -94,15 +93,19 @@ Crafty.c("Particle", {
 });
 
 Crafty.c("ParticleSystem", {
-    timeToLive: 60.0,
-    lifeTime: 0,
+    lifetime: 60,
+    framesExisted: 0,
     color: "#000000",
-    mutables: ["Height", "Alpha", "X", "Y", "Angle", "Speed", "Hue", "Saturation", "Brightness", "Rotation"], 
-    
+    mutables: ["EmitsPerSecond", "ParticleLifetime", "EmitterLifetime", "Height", "Alpha", "X", "Y", "Angle", "Speed", "Hue", "Saturation", "Brightness", "Rotation"],     
     width: 1,
-    emitsPerSecond: 10,
     framesSinceEmit: 0,
-    particleTimeToLive: 60,
+    emitsPerSecond: 0,
+    randomValue: function(range) {
+          var rangeWidth = range.Max - range.Min;
+          var randomFraction = (Math.random()*1000.0)/1000.0;
+          return (randomFraction * rangeWidth) + range.Min;
+    
+    },
     load: function(entity, src) {
         $.getJSON("snowDig.json", function(data) {
             for (i in data) {
@@ -116,6 +119,9 @@ Crafty.c("ParticleSystem", {
                 }
             
             }        
+            
+            this.lifetime = randomValue(entity.EmitterLifetime.FactoryCurrent);
+            this.emitsPerSecond = randomValue(entity.EmitsPerSecond.FactoryCurrent);            
         })
         .error(function(jqXHR, textStatus, errorThrown) {
             console.log("error " + textStatus);
@@ -164,8 +170,8 @@ Crafty.c("ParticleSystem", {
               randomSet[entity.mutables[i]] = randomValue(entity[entity.mutables[i]].FactoryCurrent);
               randomParticleEndSet[entity.mutables[i]] = randomSet[entity.mutables[i]] + randomValue(entity[entity.mutables[i]].ParticleEnd);
           }                
-          
-          var particle = Crafty.e("2D, Canvas, Multiway, Particle, Color, Tween")          
+                    
+          var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, loadimg")          
           .attr({x: randomSet.X + entity.x, 
               y: randomSet.Y + entity.y, 
               z: entity.z, 
@@ -174,10 +180,10 @@ Crafty.c("ParticleSystem", {
               rotation: randomSet.Rotation,
               alpha: randomSet.Alpha })
           .multiway(1, {})
-          .color(entity.color)
+          //.color(entity.color)
           .origin("center");
 
-          particle.timeToLive = entity.particleTimeToLive;
+          particle.lifetime = randomSet.ParticleLifetime;
                     
           particle.tween({alpha: randomParticleEndSet.Alpha, 
               h: randomParticleEndSet.Height, 
@@ -185,7 +191,7 @@ Crafty.c("ParticleSystem", {
               x: randomParticleEndSet.X + entity.x,
               y: randomParticleEndSet.Y + entity.y,
               rotation: randomParticleEndSet.Rotation
-          }, parseInt(particle.timeToLive));                    
+          }, parseInt(particle.lifetime));                    
                     
           particle.AngleStart = randomSet.Angle;
           particle.AngleCurrent = particle.AngleStart;          
@@ -210,10 +216,10 @@ Crafty.c("ParticleSystem", {
        }      
        
       function updateMutable(entity, mutable) {
-          var MinDelta = (mutable.FactoryEnd.Min - mutable.FactoryStart.Min) / entity.timeToLive;         
+          var MinDelta = (mutable.FactoryEnd.Min - mutable.FactoryStart.Min) / entity.lifetime;         
           mutable.FactoryCurrent.Min += MinDelta;
           
-          var MaxDelta = (mutable.FactoryEnd.Max - mutable.FactoryStart.Max) / entity.timeToLive;         
+          var MaxDelta = (mutable.FactoryEnd.Max - mutable.FactoryStart.Max) / entity.lifetime;         
           mutable.FactoryCurrent.Max += MaxDelta;
           
       }
@@ -225,8 +231,8 @@ Crafty.c("ParticleSystem", {
       this.bind("EnterFrame", function() {
       
       
-          this.lifeTime++;        
-          if (this.lifeTime > this.timeToLive) {
+          this.framesExisted++;        
+          if (this.framesExisted > this.lifetime) {
             this.destroy();
           }
                     
@@ -236,9 +242,28 @@ Crafty.c("ParticleSystem", {
                     
           this.framesSinceEmit++;
           
+          //console.log("Emits per second: " + this.emitsPerSecond);
+                    
           if (this.framesSinceEmit > (60.0 / this.emitsPerSecond) ) {
               createParticle(this);
               this.framesSinceEmit = 0;
+              //console.log("Emits per second before set: " + this.emitsPerSecond);
+              
+              /*
+              for (i in this) {
+                  console.log(i);
+                  for (j in this[i]) {
+                      console.log(j);
+                      for (k in this[i][j]) {
+                          console.log(k);
+                          console.log(this[i][j][k]);                          
+                      }
+                  }
+                  
+              }*/
+              
+              this.emitsPerSecond = randomValue(this.EmitsPerSecond.FactoryStart);
+              //console.log("Emits per second after set: " + this.emitsPerSecond);              
           }          
       });      
     }

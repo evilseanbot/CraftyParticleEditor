@@ -1,13 +1,23 @@
 var draggedElement;
-var mutables = ["Height", "Alpha", "X", "Y", "Angle", "Speed", "Hue", "Saturation", "Brightness", "Rotation"];
-var mutableBottomValues = {Height: 0, Alpha: 0.00, X: -160, Y: -120, Angle: 0, Speed: 0, Hue: 0, Saturation: 0, Brightness: 0, Rotation: 0};
-var mutableTopValues = {Height: 32, Alpha: 1.00, X: 160, Y: 120, Angle: 360, Speed: 8, Hue: 1, Saturation: 1, Brightness: 1, Rotation: 360};
+var mutables = ["EmitsPerSecond", "ParticleLifetime", "EmitterLifetime", "Height", "Alpha", "X", "Y", "Angle", "Speed", "Hue", "Saturation", "Brightness", "Rotation"];
+var mutableBottomValues = {EmitsPerSecond: 0, ParticleLifetime: 0, EmitterLifetime: 0, Height: 0, Alpha: 0.00, X: -160, Y: -120, Angle: 0, Speed: 0, Hue: 0, Saturation: 0, Brightness: 0, Rotation: 0};
+var mutableTopValues = {EmitsPerSecond: 180, ParticleLifetime: 240, EmitterLifetime: 240, Height: 32, Alpha: 1.00, X: 160, Y: 120, Angle: 360, Speed: 8, Hue: 1, Saturation: 1, Brightness: 1, Rotation: 360};
+
+var middleLowValues = {};
+
+for (i in mutables) {
+    middleLowValues[mutables[i]] = mutableBottomValues[mutables[i]] + ( (mutableTopValues[mutables[i]]-mutableBottomValues[mutables[i]]) / 4.0 );
+}
 
 var modelSystem = {};
 
 for (i in mutables) {
-    modelSystem[mutables[i]] = {FactoryStart: {Min:0, Max: 1}, FactoryEnd: {Min: 0, Max: 1}, ParticleEnd: {Min: 0, Max: 1}};
-}
+    modelSystem[mutables[i]] = {FactoryStart: {Min: middleLowValues[mutables[i]], Max: middleLowValues[mutables[i]]}, 
+        FactoryEnd: {Min: middleLowValues[mutables[i]], Max: middleLowValues[mutables[i]]}, 
+        ParticleEnd: {Min: middleLowValues[mutables[i]], Max: middleLowValues[mutables[i]]}
+    };
+}    
+
 
 function size (obj) {
     var size = 0, key;
@@ -35,9 +45,7 @@ function size (obj) {
             }
             
             
-            modelSystem[mutable][timeAxis][randomAxis] = resultValue;
-            console.log(" Target: " + mutable + timeAxis + randomAxis + " Model system value: " + modelSystem[mutable][timeAxis][randomAxis]);
-            
+            modelSystem[mutable][timeAxis][randomAxis] = resultValue;            
         }
         
         function changeShiftingSetter(mutable, timeAxis, setFraction, knobPos) {
@@ -117,13 +125,13 @@ function size (obj) {
 // "                    <input type='text' id='particleEnd"+setter+"' style='display: none' value='0'></input>"+
 "                </div>"+
 "                <div id='"+setter+"Sliders'>"+
-"                    <div class='slider' id='"+setter+"Slider'>"+
+"                    <div class='slider' id='"+setter+"Slider'><span style='position: absolute'>Start</span><span style='position: absolute; left: 380px'>"+topValue+"</span>"+
 "                        <hr style='position: relative; top: 18px'>            "+
 "                        <div class='fullKnob' id='"+setter+"Knob'></div>"+
 "                    </div>"+
 "                </div>"+
 "                <div id='"+setter+"SlidersRandom' style='display: none'>"+
-"                    <div class='slider' id='"+setter+"RandomSlider'>"+
+"                    <div class='slider' id='"+setter+"RandomSlider'><span style='position: absolute'>Start</span><span style='position: absolute; left: 380px'>"+topValue+"</span>"+
 "                        <hr style='position: relative; top: 18px'>            "+
 "                        <div class='minKnob' id='"+setter+"MinKnob'></div>"+
 "                        <div class='maxKnob' id='"+setter+"MaxKnob'></div>"+
@@ -248,8 +256,6 @@ function size (obj) {
       var system = Crafty.e("ParticleSystem")
           .attr({x: 160, y: 120});   
       
-       
-      
       for (i in modelSystem) {
           system[i] = {};
           for (j in modelSystem[i]) {
@@ -258,20 +264,12 @@ function size (obj) {
                   system[i][j][k] = modelSystem[i][j][k];
               }
           }
-
-          system[i].FactoryCurrent = {Min: modelSystem[i].FactoryStart.Min, Max: modelSystem[i].FactoryStart.Max}      
-         
+          
+          system[i].FactoryCurrent = {Min: modelSystem[i].FactoryStart.Min, Max: modelSystem[i].FactoryStart.Max}                          
       }
-
-
       
-      system.emitsPerSecond = $("#emitsPerSecond").val();                 
-      system.particleTimeToLive = $("#particleTimeToLive").val();           
-
-      
-      
- 
-      
+      system.lifetime = system.randomValue(system.EmitterLifetime.FactoryCurrent);
+      system.emitsPerSecond = system.randomValue(system.EmitsPerSecond.FactoryCurrent);           
   }
   
   function space (num) {
@@ -337,8 +335,29 @@ function size (obj) {
         $("#jsoncode").append("<br>");
     }
     $("#jsoncode").append("}");(*/
-    
 
+
+function showTab(id) {
+    $(id).css("display", "block");
+}    
+
+function hideTabs() {
+  $("#intro").css("display", "none");
+  $("#container").css("display", "none");
+}
+
+function readURL(input, Crafty) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          $("#preview").attr("src", e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+        
 $(document).ready(function() {
 
   // Initialize Crafty
@@ -372,6 +391,16 @@ $(document).ready(function() {
       }
   });
   
+  $("#introTab").click(function() { 
+    hideTabs();
+    showTab("#intro");
+  });
+
+  $("#editorTab").click(function() { 
+    hideTabs();
+    showTab("#container");
+  });
+  
   
   $(".setter").change(function() {
       Crafty("ParticleSystem").destroy();
@@ -382,5 +411,20 @@ $(document).ready(function() {
       createSetter(mutables[i], mutableBottomValues[mutables[i]], mutableTopValues[mutables[i]]);
   }  
   
+  $("#setters").append("<input type='file' id='image-file'><img id='preview' src=''>");
+  
+  $("#image-file").change(function() {
+      readURL(this, Crafty);
+  });
+  
   $("body").append("</div>");
+  
+  $("#preview").load(function(){
+    if ($("#preview").attr("src") != "") {  
+        Crafty.sprite($("#preview").width(), $("#preview").height(), $("#preview").attr("src"), {
+             loadimg: [0,0]
+        }); 
+    }
+  });  
+
 });

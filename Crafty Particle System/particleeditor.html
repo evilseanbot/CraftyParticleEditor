@@ -86,15 +86,37 @@
             
             #container {
                width: 1200px;
+               display: block;
+            }
+            
+            #intro {
+               display: none;
             }
         </style>
     </head> 
     <body> 
+        <div id='siteMenu'>
+            <span id='introTab'>Intro</span> | <span id='editorTab'>Editor</span>
+        </div>
+        <br>
+        <div id='intro'>
+            <p>This is a particle editor for CraftyJS.
+            
+            <p>To use in your CraftyJS game:
+
+            <ol>
+                <li>Include the <a href='ParticleSystem.js'>ParticleSystem.js</a> file.</li>
+                <li>Use the editor to create your particle system.</li>
+                <li>Click on the Get JSON button and copy the JSON code into a file.</li>
+                <li>Inside the game, make a ParticleSystem object and load your json file: [var system = Crafty.e("ParticleSystem").load("yoururl.json"); ]</li>
+                <li>The ParticleSystem object has a 2D component and can be moved around, attached, etc, like any other 2D Crafty object.</li>
+            </ol>
+            
+            <p>
+        </div>
+        </div>
         <div id='container'>
             <div id='setters'>
-
-                <br>Emits per Second: <input type='text' class='setter' id='emitsPerSecond' value='10'></input>
-                <br>Particle Lifetime (in frames): <input type='text' class='setter' id='particleTimeToLive' value='60'></input>                                
             </div>
             
             <button id='play'>PLAY</button>
