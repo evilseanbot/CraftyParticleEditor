@@ -18,6 +18,8 @@ for (i in mutables) {
     };
 }    
 
+modelSystem.imageUsed = false;
+modelSystem.imageName = "img";
 
 function size (obj) {
     var size = 0, key;
@@ -249,6 +251,33 @@ function size (obj) {
             
         }
         
+  function createImageSetter() {
+      /*$("#setters").append(
+        "<div class='setterDiv'>" +
+        "<input type='radio' class='imageUsed' name='imageUsed' id='imageUsedFalse' checked='checked' />Use squares "+
+        "<input type='radio' class='imageUsed' name='imageUsed' id='imageUsedTrue' />Use image" +
+        "<input type='file' id='image-file' />" + 
+        "<br>Image name: <input type='text' id='imageName' />"+        
+        "</div>"
+      )*/
+      
+      $(".imageUsed").change(function() {
+          if ($("#imageUsedFalse").attr("checked") == "checked") {
+              modelSystem.imageUsed = false;
+          } else {
+              modelSystem.imageUsed = true;
+          }
+          addParticleSystem();
+      });
+      
+      
+      $("#imageName").blur(function() {
+          modelSystem.imageName = $("#imageName").val();
+          loadUploadedImage();
+      });
+           
+  }
+        
   function addParticleSystem() {    
         Crafty("ParticleSystem").destroy();
         Crafty("Particle").destroy();        
@@ -256,20 +285,22 @@ function size (obj) {
       var system = Crafty.e("ParticleSystem")
           .attr({x: 160, y: 120});   
       
-      for (i in modelSystem) {
-          system[i] = {};
-          for (j in modelSystem[i]) {
-              system[i][j] = {};
-              for (k in modelSystem[i][j]) {
-                  system[i][j][k] = modelSystem[i][j][k];
+      for (i in mutables) {      
+          system[mutables[i]] = {};
+          for (j in modelSystem[mutables[i]]) {
+              system[mutables[i]][j] = {};
+              for (k in modelSystem[mutables[i]][j]) {
+                  system[mutables[i]][j][k] = modelSystem[mutables[i]][j][k];
               }
           }
           
-          system[i].FactoryCurrent = {Min: modelSystem[i].FactoryStart.Min, Max: modelSystem[i].FactoryStart.Max}                          
+          system[mutables[i]].FactoryCurrent = {Min: modelSystem[mutables[i]].FactoryStart.Min, Max: modelSystem[mutables[i]].FactoryStart.Max}                          
       }
       
       system.lifetime = system.randomValue(system.EmitterLifetime.FactoryCurrent);
       system.emitsPerSecond = system.randomValue(system.EmitsPerSecond.FactoryCurrent);           
+      system.imageUsed = modelSystem.imageUsed;
+      system.imageName = modelSystem.imageName;
   }
   
   function space (num) {
@@ -286,56 +317,47 @@ function size (obj) {
   
       $("#jsoncode").html("{<br>");
       for (i in modelSystem) {
-          $("#jsoncode").append(space(4)+i+": {<br>");             
-          
-          jindex = 0;          
-          for (j in modelSystem[i]) {
-              $("#jsoncode").append(space(8)+j+": {<br>");              
+      
+          if (typeof(modelSystem[i]) == "object") {
+              $("#jsoncode").append(space(4)+i+": {<br>");             
               
-              
-              kindex = 0;
-              for (k in modelSystem[i][j]) {
-                  $("#jsoncode").append(space(12)+k+": "+modelSystem[i][j][k]);              
+              jindex = 0;          
+              for (j in modelSystem[i]) {
+                  $("#jsoncode").append(space(8)+j+": {<br>");              
                   
-                  kindex++;
-                  if (kindex != size(modelSystem[i][j])) {
+                  
+                  kindex = 0;
+                  for (k in modelSystem[i][j]) {
+                      $("#jsoncode").append(space(12)+k+": "+modelSystem[i][j][k]);              
+                      
+                      kindex++;
+                      if (kindex != size(modelSystem[i][j])) {
+                          $("#jsoncode").append(",");              
+                      }
+                      $("#jsoncode").append("<br>");              
+                      
+                  }
+                  $("#jsoncode").append(space(8) + "}");
+                  jindex++;
+                  if (jindex != size(modelSystem[i]) ) {
                       $("#jsoncode").append(",");              
                   }
                   $("#jsoncode").append("<br>");              
-                  
               }
-              $("#jsoncode").append(space(8) + "}");
-              jindex++;
-              if (jindex != size(modelSystem[i]) ) {
-                  $("#jsoncode").append(",");              
-              }
-              $("#jsoncode").append("<br>");              
+              $("#jsoncode").append(space(4) + "}");          
+          } else {
+              $("#jsoncode").append(space(4)+i+": " + modelSystem[i]);              
           }
-          $("#jsoncode").append(space(4) + "}");          
           iindex++;
           if (iindex != size(modelSystem) ) {
               $("#jsoncode").append(",");              
           }
           $("#jsoncode").append("<br>");
+
       }
           
       $("#jsoncode").append("}<br>"); // Final close bracket (There should be more.)
   }
-    
-/*    for (i in mutables) {
-        $("#jsoncode").append("&nbsp;&nbsp;"+mutables[i]+":<br>");          
-        $("#jsoncode").append("&nbsp;&nbsp;{<br>");                    
-        $("#jsoncode").append("&nbsp;&nbsp;&nbsp;&nbsp;factoryStart: "+modelSystem,($("#start"+mutables[i]).val())+",<br>");          
-        $("#jsoncode").append("&nbsp;&nbsp;&nbsp;&nbsp;factoryEnd: "+($("#end"+mutables[i]).val())+",<br>");
-        $("#jsoncode").append("&nbsp;&nbsp;&nbsp;&nbsp;particleEnd: "+($("#particleEnd"+mutables[i]).val())+"<br>");
-        $("#jsoncode").append("&nbsp;&nbsp;}");
-        if (i != mutables.length -1) {
-            $("#jsoncode").append(",");              
-        }
-        $("#jsoncode").append("<br>");
-    }
-    $("#jsoncode").append("}");(*/
-
 
 function showTab(id) {
     $(id).css("display", "block");
@@ -355,6 +377,14 @@ function readURL(input, Crafty) {
         }
 
         reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function loadUploadedImage() {
+    if ($("#preview").attr("src") != "") {  
+        var insertObj = {};
+        insertObj[modelSystem.imageName] = [0, 0];
+        Crafty.sprite($("#preview").width(), $("#preview").height(), $("#preview").attr("src"), insertObj); 
     }
 }
         
@@ -406,25 +436,20 @@ $(document).ready(function() {
       Crafty("ParticleSystem").destroy();
       addParticleSystem();      
   });
-  
+
+  createImageSetter();  
   for (i in mutables) {
       createSetter(mutables[i], mutableBottomValues[mutables[i]], mutableTopValues[mutables[i]]);
-  }  
+  }    
   
-  $("#setters").append("<input type='file' id='image-file'><img id='preview' src=''>");
+  $("#setters").append("<img id='preview' src=''>");
   
   $("#image-file").change(function() {
       readURL(this, Crafty);
   });
   
   $("body").append("</div>");
-  
-  $("#preview").load(function(){
-    if ($("#preview").attr("src") != "") {  
-        Crafty.sprite($("#preview").width(), $("#preview").height(), $("#preview").attr("src"), {
-             loadimg: [0,0]
-        }); 
-    }
-  });  
-
+  $("#preview").load(function(){ 
+      loadUploadedImage(); 
+  });
 });

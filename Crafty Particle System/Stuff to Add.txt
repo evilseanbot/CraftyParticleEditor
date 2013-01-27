@@ -1,15 +1,12 @@
 Features to add:
 =============================================
-* Colorsquare / Sprite option.
 * SpriteColor support. (ColorAlpha setting)
-* Input name of image for particles.
-* Image settings transfered to Json.
+  - Seems to be some bug with Sprite Color (:/)
+* Fix black box at first colorsquare particle.
 * Sprite Animations!
 * Different Height/Width
-* Export to .json! {This would actually allow you to use it in the Comp.}
+* Export to .json!
   - You have this in the json button, but you need to add quotes around any words.
-* Import from .json! {This would actually allow you to use it in the Comp.}
-  - You just got the ajax to be successful, now looad the data.
 * Random+Shifting Sliders
 * Changeable backgrounds
 * Multiple emitters.
@@ -19,6 +16,7 @@ Features to add:
   - Search system.
   - Tag system
   - Ratings
+* Put setters in own frame so that you can independently scroll them.
 
 On hold:
 * Velocity Sliders {May extend upon ability to handle}

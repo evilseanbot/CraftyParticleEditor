@@ -50,7 +50,26 @@ return RGB;
 Crafty.c("Particle", {
     framesExisted: 0,
     lifetime: 60,
+    imageUsed: false, 
+    setColor: function(entity) {
+        var hsvColor = hsv2rgb(entity.HueCurrent, entity.SaturationCurrent, entity.BrightnessCurrent);
+        
+        var red = hsvColor["red"].toString(16);
+        var green = hsvColor["green"].toString(16);
+        var blue = hsvColor["blue"].toString(16);
+        
+        // Adjust this for image + non-image versions in future.        
+        if (entity.imageUsed) {
+            //this.spriteColor("#" + red + "" + green + "" + blue, 1);
+        } else {
+            entity.color("#" + red + "" + green + "" + blue);
+        }
+    
+    },
     init: function() {    
+    
+      //this.setColor(this);
+    
       this.bind("EnterFrame", function() {
 
 
@@ -71,13 +90,7 @@ Crafty.c("Particle", {
         var delta = (this.BrightnessEnd - this.BrightnessStart) / this.lifetime;         
         this.BrightnessCurrent += delta;
         
-        var hsvColor = hsv2rgb(this.HueCurrent, this.SaturationCurrent, this.BrightnessCurrent);
-        
-        var red = hsvColor["red"].toString(16);
-        var green = hsvColor["green"].toString(16);
-        var blue = hsvColor["blue"].toString(16);
-                
-        //this.color("#" + red + "" + green + "" + blue);
+        this.setColor(this);
         
         var radToDegrees = 57.2957795;
         this._movement.x = Math.cos(this.AngleCurrent/radToDegrees)*this.SpeedCurrent;
@@ -95,7 +108,7 @@ Crafty.c("Particle", {
 Crafty.c("ParticleSystem", {
     lifetime: 60,
     framesExisted: 0,
-    color: "#000000",
+    color: "#ffffff",
     mutables: ["EmitsPerSecond", "ParticleLifetime", "EmitterLifetime", "Height", "Alpha", "X", "Y", "Angle", "Speed", "Hue", "Saturation", "Brightness", "Rotation"],     
     width: 1,
     framesSinceEmit: 0,
@@ -108,20 +121,22 @@ Crafty.c("ParticleSystem", {
     },
     load: function(entity, src) {
         $.getJSON("snowDig.json", function(data) {
-            for (i in data) {
-                entity[i] = {};
-                for (j in data[i]) {
-                    entity[i][j] = {};
-                    for (k in data[i][j]) {
-                        entity[i][j][k] = data[i][j][k];
+            for (i in mutables) {
+                entity[mutables[i]] = {};
+                for (j in data[mutables[i]]) {
+                    entity[mutables[i]][j] = {};
+                    for (k in data[mutables[i]][j]) {
+                        entity[mutables[i]][j][k] = data[mutables[i]][j][k];
                     }
-                    entity[i].FactoryCurrent = {Min: data[i].FactoryStart.Min, Max: data[i].FactoryStart.Max};
+                    entity[mutables[i]].FactoryCurrent = {Min: data[mutables[i]].FactoryStart.Min, Max: data[mutables[i]].FactoryStart.Max};
                 }
             
             }        
             
             this.lifetime = randomValue(entity.EmitterLifetime.FactoryCurrent);
             this.emitsPerSecond = randomValue(entity.EmitsPerSecond.FactoryCurrent);            
+            this.imageUsed = data.imageUsed;
+            this.imageName = data.imageName;
         })
         .error(function(jqXHR, textStatus, errorThrown) {
             console.log("error " + textStatus);
@@ -169,10 +184,15 @@ Crafty.c("ParticleSystem", {
           for (i in entity.mutables) {
               randomSet[entity.mutables[i]] = randomValue(entity[entity.mutables[i]].FactoryCurrent);
               randomParticleEndSet[entity.mutables[i]] = randomSet[entity.mutables[i]] + randomValue(entity[entity.mutables[i]].ParticleEnd);
-          }                
-                    
-          var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, loadimg")          
-          .attr({x: randomSet.X + entity.x, 
+          }       
+                  
+          if (entity.imageUsed) {                    
+              var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, SpriteColor, " + entity.imageName);
+              particle.imageUsed = entity.imageUsed;
+          } else {
+              var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, Color")              
+          }
+          particle.attr({x: randomSet.X + entity.x, 
               y: randomSet.Y + entity.y, 
               z: entity.z, 
               h: randomSet.Height, 
@@ -180,10 +200,10 @@ Crafty.c("ParticleSystem", {
               rotation: randomSet.Rotation,
               alpha: randomSet.Alpha })
           .multiway(1, {})
-          //.color(entity.color)
           .origin("center");
 
           particle.lifetime = randomSet.ParticleLifetime;
+          particle.imageUsed = entity.imageUsed;
                     
           particle.tween({alpha: randomParticleEndSet.Alpha, 
               h: randomParticleEndSet.Height, 
@@ -241,29 +261,11 @@ Crafty.c("ParticleSystem", {
           }                    
                     
           this.framesSinceEmit++;
-          
-          //console.log("Emits per second: " + this.emitsPerSecond);
-                    
+                              
           if (this.framesSinceEmit > (60.0 / this.emitsPerSecond) ) {
               createParticle(this);
-              this.framesSinceEmit = 0;
-              //console.log("Emits per second before set: " + this.emitsPerSecond);
-              
-              /*
-              for (i in this) {
-                  console.log(i);
-                  for (j in this[i]) {
-                      console.log(j);
-                      for (k in this[i][j]) {
-                          console.log(k);
-                          console.log(this[i][j][k]);                          
-                      }
-                  }
-                  
-              }*/
-              
+              this.framesSinceEmit = 0;              
               this.emitsPerSecond = randomValue(this.EmitsPerSecond.FactoryStart);
-              //console.log("Emits per second after set: " + this.emitsPerSecond);              
           }          
       });      
     }
