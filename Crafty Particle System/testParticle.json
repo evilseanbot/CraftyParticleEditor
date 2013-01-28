@@ -1,30 +1,30 @@
 {
     "EmitsPerSecond": {
         "FactoryStart": {
-            "Min": 45,
-            "Max": 45
+            "Min": 58.5,
+            "Max": 58.5
         },
         "FactoryEnd": {
-            "Min": 45,
-            "Max": 45
+            "Min": 58.5,
+            "Max": 58.5
         },
         "ParticleEnd": {
-            "Min": 45,
-            "Max": 45
+            "Min": 0,
+            "Max": 0
         }
     },
     "ParticleLifetime": {
         "FactoryStart": {
-            "Min": 60,
-            "Max": 60
+            "Min": 26.4,
+            "Max": 26.4
         },
         "FactoryEnd": {
-            "Min": 60,
-            "Max": 60
+            "Min": 26.4,
+            "Max": 26.4
         },
         "ParticleEnd": {
-            "Min": 60,
-            "Max": 60
+            "Min": 0,
+            "Max": 0
         }
     },
     "EmitterLifetime": {
@@ -43,96 +43,96 @@
     },
     "Height": {
         "FactoryStart": {
-            "Min": 8,
-            "Max": 8
+            "Min": 1.68,
+            "Max": 1.68
         },
         "FactoryEnd": {
-            "Min": 8,
-            "Max": 8
+            "Min": 1.68,
+            "Max": 1.68
         },
         "ParticleEnd": {
-            "Min": 8,
-            "Max": 8
+            "Min": 16,
+            "Max": 16
         }
     },
     "Alpha": {
         "FactoryStart": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": 0.93,
+            "Max": 0.93
         },
         "FactoryEnd": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": 0.93,
+            "Max": 0.93
         },
         "ParticleEnd": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": -0.9299999999999999,
+            "Max": -0.9299999999999999
         }
     },
     "X": {
         "FactoryStart": {
-            "Min": -80,
-            "Max": -80
+            "Min": -20,
+            "Max": 4
         },
         "FactoryEnd": {
-            "Min": -80,
-            "Max": -80
+            "Min": -20,
+            "Max": 4
         },
         "ParticleEnd": {
-            "Min": -80,
-            "Max": -80
+            "Min": 0,
+            "Max": 0
         }
     },
     "Y": {
         "FactoryStart": {
-            "Min": -60,
-            "Max": -60
+            "Min": -10.799999999999997,
+            "Max": -10.799999999999997
         },
         "FactoryEnd": {
-            "Min": -60,
-            "Max": -60
+            "Min": -10.799999999999997,
+            "Max": -10.799999999999997
         },
         "ParticleEnd": {
-            "Min": -60,
-            "Max": -60
+            "Min": 0,
+            "Max": 0
         }
     },
     "Angle": {
         "FactoryStart": {
-            "Min": 90,
-            "Max": 90
+            "Min": 267.3,
+            "Max": 267.3
         },
         "FactoryEnd": {
-            "Min": 90,
-            "Max": 90
+            "Min": 267.3,
+            "Max": 267.3
         },
         "ParticleEnd": {
-            "Min": 90,
-            "Max": 90
+            "Min": 0,
+            "Max": 0
         }
     },
     "Speed": {
         "FactoryStart": {
-            "Min": 2,
-            "Max": 2
+            "Min": 4.4,
+            "Max": 4.4
         },
         "FactoryEnd": {
-            "Min": 2,
-            "Max": 2
+            "Min": 4.4,
+            "Max": 4.4
         },
         "ParticleEnd": {
-            "Min": 2,
-            "Max": 2
+            "Min": -4.6,
+            "Max": -4.6
         }
     },
     "Hue": {
         "FactoryStart": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": 0.75,
+            "Max": 0.75
         },
         "FactoryEnd": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": 0.75,
+            "Max": 0.75
         },
         "ParticleEnd": {
             "Min": 0.25,
@@ -141,46 +141,46 @@
     },
     "Saturation": {
         "FactoryStart": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": 0.5175,
+            "Max": 0.5175
         },
         "FactoryEnd": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": 0.5175,
+            "Max": 0.5175
         },
         "ParticleEnd": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": 0,
+            "Max": 0
         }
     },
     "Brightness": {
         "FactoryStart": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": 0.93,
+            "Max": 0.93
         },
         "FactoryEnd": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": 0.93,
+            "Max": 0.93
         },
         "ParticleEnd": {
-            "Min": 0.25,
-            "Max": 0.25
+            "Min": 0,
+            "Max": 0
         }
     },
     "Rotation": {
         "FactoryStart": {
-            "Min": 90,
-            "Max": 90
+            "Min": 160.2,
+            "Max": 160.2
         },
         "FactoryEnd": {
-            "Min": 90,
-            "Max": 90
+            "Min": 160.2,
+            "Max": 160.2
         },
         "ParticleEnd": {
-            "Min": 90,
-            "Max": 90
+            "Min": 0,
+            "Max": 0
         }
     },
-    "imageUsed": false,
-    "imageName": img
+    "imageUsed": "false",
+    "imageName": "img"
 }

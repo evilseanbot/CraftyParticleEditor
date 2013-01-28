@@ -119,24 +119,25 @@ Crafty.c("ParticleSystem", {
           return (randomFraction * rangeWidth) + range.Min;
     
     },
-    load: function(entity, src) {
-        $.getJSON("snowDig.json", function(data) {
-            for (i in mutables) {
-                entity[mutables[i]] = {};
-                for (j in data[mutables[i]]) {
-                    entity[mutables[i]][j] = {};
-                    for (k in data[mutables[i]][j]) {
-                        entity[mutables[i]][j][k] = data[mutables[i]][j][k];
+    load: function(src) {	
+	    var entity = this;
+        $.getJSON(src, function(data) {
+            for (i in entity.mutables) {
+                entity[entity.mutables[i]] = {};
+                for (j in data[entity.mutables[i]]) {
+                    entity[entity.mutables[i]][j] = {};
+                    for (k in data[entity.mutables[i]][j]) {
+                        entity[entity.mutables[i]][j][k] = data[entity.mutables[i]][j][k];
                     }
-                    entity[mutables[i]].FactoryCurrent = {Min: data[mutables[i]].FactoryStart.Min, Max: data[mutables[i]].FactoryStart.Max};
+                    entity[entity.mutables[i]].FactoryCurrent = {Min: data[entity.mutables[i]].FactoryStart.Min, Max: data[entity.mutables[i]].FactoryStart.Max};
                 }
             
             }        
             
-            this.lifetime = randomValue(entity.EmitterLifetime.FactoryCurrent);
-            this.emitsPerSecond = randomValue(entity.EmitsPerSecond.FactoryCurrent);            
-            this.imageUsed = data.imageUsed;
-            this.imageName = data.imageName;
+            entity.lifetime = entity.randomValue(entity.EmitterLifetime.FactoryCurrent);
+            entity.emitsPerSecond = entity.randomValue(entity.EmitsPerSecond.FactoryCurrent);            
+            entity.imageUsed = data.imageUsed;
+            entity.imageName = data.imageName;
         })
         .error(function(jqXHR, textStatus, errorThrown) {
             console.log("error " + textStatus);
@@ -144,7 +145,7 @@ Crafty.c("ParticleSystem", {
         })
         .complete(function(jqXHR, textStatus, errorThrown) {
             console.log("complete " + textStatus);
-            console.log("incoming Text " + jqXHR.responseText);
+            //console.log("incoming Text " + jqXHR.responseText);
         });
         /*$.ajax({
             url: 'testParticle.json',
@@ -186,9 +187,10 @@ Crafty.c("ParticleSystem", {
               randomParticleEndSet[entity.mutables[i]] = randomSet[entity.mutables[i]] + randomValue(entity[entity.mutables[i]].ParticleEnd);
           }       
                   
-          if (entity.imageUsed) {                    
+          if (entity.imageUsed && entity.imageUsed != "false") {                    
               var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, SpriteColor, " + entity.imageName);
               particle.imageUsed = entity.imageUsed;
+			  console.log("Image is used");
           } else {
               var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, Color")              
           }

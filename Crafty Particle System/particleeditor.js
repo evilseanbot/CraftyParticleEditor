@@ -301,7 +301,7 @@ function size (obj) {
       system.emitsPerSecond = system.randomValue(system.EmitsPerSecond.FactoryCurrent);           
       system.imageUsed = modelSystem.imageUsed;
       system.imageName = modelSystem.imageName;
-  }
+   }
   
   function space (num) {
       var spaces = "";
@@ -346,7 +346,7 @@ function size (obj) {
               }
               $("#jsoncode").append(space(4) + "}");          
           } else {
-              $("#jsoncode").append(space(4)+"\""+i+"\": " + modelSystem[i]);              
+              $("#jsoncode").append(space(4)+"\""+i+"\": \"" + modelSystem[i] + "\"");              
           }
           iindex++;
           if (iindex != size(modelSystem) ) {
