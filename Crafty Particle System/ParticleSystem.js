@@ -111,7 +111,7 @@ Crafty.c("ParticleSystem", {
     color: "#ffffff",
     mutables: ["EmitsPerSecond", "ParticleLifetime", "EmitterLifetime", "Height", "Alpha", "X", "Y", "Angle", "Speed", "Hue", "Saturation", "Brightness", "Rotation"],     
     width: 1,
-    framesSinceEmit: 0,
+    emitsDue: 0,
     emitsPerSecond: 0,
     randomValue: function(range) {
           var rangeWidth = range.Max - range.Min;
@@ -260,11 +260,11 @@ Crafty.c("ParticleSystem", {
               updateMutable(this, this[this.mutables[i]]);
           }                    
                     
-          this.framesSinceEmit++;
+		  this.emitsDue += (this.emitsPerSecond / 60.0);		
                               
-          if (this.framesSinceEmit > (60.0 / this.emitsPerSecond) ) {
+          while (this.emitsDue > 1) {
               createParticle(this);
-              this.framesSinceEmit = 0;              
+              this.emitsDue -= 1.0;              
               this.emitsPerSecond = randomValue(this.EmitsPerSecond.FactoryStart);
           }          
       });      

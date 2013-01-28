@@ -73,7 +73,7 @@
             }
                         
             #cr-stage {
-               float: left;
+			   float: left;
                display: inline;
                margin-left: 50px;
             }
@@ -92,7 +92,13 @@
             #intro {
                display: none;
             }
-        </style>
+			
+			#viewScreenDiv {
+			    position: fixed;
+				border: 1px solid black;
+				left: 420px;
+			}
+	        </style>
     </head> 
     <body> 
         <div id='siteMenu'>
@@ -124,10 +130,13 @@
               <br>Image name: <input type='text' id='imageName'>
               </div>      
             </div>
-            
-            <button id='play'>PLAY</button>
-            <button id='stop'>STOP</button>
-            <button id='json'>JSON FILE</button>
-            <div id='jsoncode' style='display: none; float: left'></div>
+            <div id='viewScreenDiv'>
+				<button id='play'>PLAY</button>
+				<button id='stop'>STOP</button>
+				<button id='json'>JSON FILE</button>
+				<div id='jsoncode' style='display: none; float: left'></div>
+				
+				<div id="cr-stage" style="width: 640px; height: 480px; overflow: hidden; position: relative; background-color: black; background-position: initial initial; background-repeat: initial initial;"><div style="position: absolute; z-index: 1; -webkit-transform: scale(2, 2);"></div><canvas width="640" height="480" style="position: absolute; left: 0px; top: 0px;"></canvas></div>
+			</div>
     </body> 
 </html>

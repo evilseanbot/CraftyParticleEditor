@@ -16,7 +16,6 @@ Features to add:
   - Search system.
   - Tag system
   - Ratings
-* Put setters in own frame so that you can independently scroll them.
 
 On hold:
 * Velocity Sliders {May extend upon ability to handle}

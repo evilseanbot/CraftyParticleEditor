@@ -1,38 +1,186 @@
 {
-  Height:
-  {
-    factoryStart: 52.16,
-    factoryEnd: 52.16,
-    particleEnd: 0
-  },
-  Alpha:
-  {
-    factoryStart: 0.5,
-    factoryEnd: 0.5,
-    particleEnd: 0
-  },
-  X:
-  {
-    factoryStart: 160,
-    factoryEnd: 160,
-    particleEnd: 0
-  },
-  Y:
-  {
-    factoryStart: 120,
-    factoryEnd: 120,
-    particleEnd: 0
-  },
-  Angle:
-  {
-    factoryStart: 180,
-    factoryEnd: 180,
-    particleEnd: 0
-  },
-  Speed:
-  {
-    factoryStart: 5,
-    factoryEnd: 5,
-    particleEnd: 0
-  }
+    "EmitsPerSecond": {
+        "FactoryStart": {
+            "Min": 45,
+            "Max": 45
+        },
+        "FactoryEnd": {
+            "Min": 45,
+            "Max": 45
+        },
+        "ParticleEnd": {
+            "Min": 45,
+            "Max": 45
+        }
+    },
+    "ParticleLifetime": {
+        "FactoryStart": {
+            "Min": 60,
+            "Max": 60
+        },
+        "FactoryEnd": {
+            "Min": 60,
+            "Max": 60
+        },
+        "ParticleEnd": {
+            "Min": 60,
+            "Max": 60
+        }
+    },
+    "EmitterLifetime": {
+        "FactoryStart": {
+            "Min": 60,
+            "Max": 60
+        },
+        "FactoryEnd": {
+            "Min": 60,
+            "Max": 60
+        },
+        "ParticleEnd": {
+            "Min": 60,
+            "Max": 60
+        }
+    },
+    "Height": {
+        "FactoryStart": {
+            "Min": 8,
+            "Max": 8
+        },
+        "FactoryEnd": {
+            "Min": 8,
+            "Max": 8
+        },
+        "ParticleEnd": {
+            "Min": 8,
+            "Max": 8
+        }
+    },
+    "Alpha": {
+        "FactoryStart": {
+            "Min": 0.25,
+            "Max": 0.25
+        },
+        "FactoryEnd": {
+            "Min": 0.25,
+            "Max": 0.25
+        },
+        "ParticleEnd": {
+            "Min": 0.25,
+            "Max": 0.25
+        }
+    },
+    "X": {
+        "FactoryStart": {
+            "Min": -80,
+            "Max": -80
+        },
+        "FactoryEnd": {
+            "Min": -80,
+            "Max": -80
+        },
+        "ParticleEnd": {
+            "Min": -80,
+            "Max": -80
+        }
+    },
+    "Y": {
+        "FactoryStart": {
+            "Min": -60,
+            "Max": -60
+        },
+        "FactoryEnd": {
+            "Min": -60,
+            "Max": -60
+        },
+        "ParticleEnd": {
+            "Min": -60,
+            "Max": -60
+        }
+    },
+    "Angle": {
+        "FactoryStart": {
+            "Min": 90,
+            "Max": 90
+        },
+        "FactoryEnd": {
+            "Min": 90,
+            "Max": 90
+        },
+        "ParticleEnd": {
+            "Min": 90,
+            "Max": 90
+        }
+    },
+    "Speed": {
+        "FactoryStart": {
+            "Min": 2,
+            "Max": 2
+        },
+        "FactoryEnd": {
+            "Min": 2,
+            "Max": 2
+        },
+        "ParticleEnd": {
+            "Min": 2,
+            "Max": 2
+        }
+    },
+    "Hue": {
+        "FactoryStart": {
+            "Min": 0.25,
+            "Max": 0.25
+        },
+        "FactoryEnd": {
+            "Min": 0.25,
+            "Max": 0.25
+        },
+        "ParticleEnd": {
+            "Min": 0.25,
+            "Max": 0.25
+        }
+    },
+    "Saturation": {
+        "FactoryStart": {
+            "Min": 0.25,
+            "Max": 0.25
+        },
+        "FactoryEnd": {
+            "Min": 0.25,
+            "Max": 0.25
+        },
+        "ParticleEnd": {
+            "Min": 0.25,
+            "Max": 0.25
+        }
+    },
+    "Brightness": {
+        "FactoryStart": {
+            "Min": 0.25,
+            "Max": 0.25
+        },
+        "FactoryEnd": {
+            "Min": 0.25,
+            "Max": 0.25
+        },
+        "ParticleEnd": {
+            "Min": 0.25,
+            "Max": 0.25
+        }
+    },
+    "Rotation": {
+        "FactoryStart": {
+            "Min": 90,
+            "Max": 90
+        },
+        "FactoryEnd": {
+            "Min": 90,
+            "Max": 90
+        },
+        "ParticleEnd": {
+            "Min": 90,
+            "Max": 90
+        }
+    },
+    "imageUsed": false,
+    "imageName": img
 }

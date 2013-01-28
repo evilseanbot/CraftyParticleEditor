@@ -319,16 +319,16 @@ function size (obj) {
       for (i in modelSystem) {
       
           if (typeof(modelSystem[i]) == "object") {
-              $("#jsoncode").append(space(4)+i+": {<br>");             
+              $("#jsoncode").append(space(4)+"\""+i+"\": {<br>");             
               
               jindex = 0;          
               for (j in modelSystem[i]) {
-                  $("#jsoncode").append(space(8)+j+": {<br>");              
+                  $("#jsoncode").append(space(8)+"\""+j+"\": {<br>");              
                   
                   
                   kindex = 0;
                   for (k in modelSystem[i][j]) {
-                      $("#jsoncode").append(space(12)+k+": "+modelSystem[i][j][k]);              
+                      $("#jsoncode").append(space(12)+"\""+k+"\": "+modelSystem[i][j][k]);              
                       
                       kindex++;
                       if (kindex != size(modelSystem[i][j])) {
@@ -346,7 +346,7 @@ function size (obj) {
               }
               $("#jsoncode").append(space(4) + "}");          
           } else {
-              $("#jsoncode").append(space(4)+i+": " + modelSystem[i]);              
+              $("#jsoncode").append(space(4)+"\""+i+"\": " + modelSystem[i]);              
           }
           iindex++;
           if (iindex != size(modelSystem) ) {
