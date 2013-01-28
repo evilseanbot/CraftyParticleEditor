@@ -1,13 +1,10 @@
 Features to add:
 =============================================
-* SpriteColor support. (ColorAlpha setting)
-  - Seems to be some bug with Sprite Color (:/)
 * Fix black box at first colorsquare particle.
 * Sprite Animations!
 * Different Height/Width
 * Export to .json!
   - You have this in the json button, but you need to add quotes around any words.
-* Random+Shifting Sliders
 * Changeable backgrounds
 * Multiple emitters.
 * Zoomable button!
@@ -16,6 +13,10 @@ Features to add:
   - Search system.
   - Tag system
   - Ratings
+* Add line-dots for random-shifting sliders.
+* SpriteColor support. (ColorAlpha setting)
+  - Seems to be some bug with Sprite Color (:/)
 
+  
 On hold:
 * Velocity Sliders {May extend upon ability to handle}

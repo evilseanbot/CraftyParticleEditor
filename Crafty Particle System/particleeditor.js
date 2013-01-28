@@ -30,7 +30,7 @@ function size (obj) {
 }; 
  
          function changeShiftingRandomSetter(mutable, timeAxis, randomAxis, setFraction, knobPos) {
-            //$("#"+mutable+""+timeAxis+""+randomAxis+"Knob").css("left", knobPos);
+            $("#"+mutable+""+timeAxis+""+randomAxis+"Knob").css("left", knobPos);
             arrangeDots(mutable);
             
             var bottomValue = mutableBottomValues[mutable];
@@ -122,9 +122,6 @@ function size (obj) {
 "                        <hr style='position: relative; top: 18px'>            "+
 "                        <div class='fullKnob' id='"+setter+"ParticleEndKnob'></div>"+
 "                    </div>            "+
-// "                    <input type='text' id='start"+setter+"' style='display: none' value='"+(minValue+maxValue/2.0)+"'></input>"+
-// "                    <input type='text' id='end"+setter+"' style='display: none' value='"+(minValue+maxValue/2.0)+"'></input>"+
-// "                    <input type='text' id='particleEnd"+setter+"' style='display: none' value='0'></input>"+
 "                </div>"+
 "                <div id='"+setter+"Sliders'>"+
 "                    <div class='slider' id='"+setter+"Slider'><span style='position: absolute'>Start</span><span style='position: absolute; left: 380px'>"+topValue+"</span>"+
@@ -139,6 +136,30 @@ function size (obj) {
 "                        <div class='maxKnob' id='"+setter+"MaxKnob'></div>"+
 "                    </div>"+
 "                </div>"+
+"                <div id='"+setter+"SlidersRandomShifting' style='display: none'>"+
+"                    <div class='slider' id='"+setter+"FactoryStartRandomSlider'><span style='position: absolute'>Start</span><span style='position: absolute; left: 380px'>"+topValue+"</span>"+
+"                        <hr style='position: relative; top: 18px'>            "+
+"                        <div class='minKnob' id='"+setter+"FactoryStartMinKnob'></div>"+
+"                        <div class='maxKnob' id='"+setter+"FactoryStartMaxKnob'></div>"+
+"                    </div>"+
+"                    "+
+"                    <div class='betweenSlider' id='between"+setter+"RandomSlider'>"+
+"                    </div>"+
+""+
+"                    <div class='slider' id='"+setter+"FactoryEndRandomSlider'><span style='position: absolute'>End</span>"+
+"                        <hr style='position: relative; top: 18px'>            "+
+"                        <div class='minKnob' id='"+setter+"FactoryEndMinKnob'></div>"+
+"                        <div class='maxKnob' id='"+setter+"FactoryEndMaxKnob'></div>"+
+"                    </div>            "+
+"                    <div class='slider' id='"+setter+"ParticleEndRandomSlider'><span style='position: absolute'>Particle end</span>"+
+"                        <hr style='position: relative; top: 18px'>            "+
+"                        <div class='minKnob' id='"+setter+"ParticleEndMinKnob'></div>"+
+"                        <div class='maxKnob' id='"+setter+"ParticleEndMaxKnob'></div>"+
+"                    </div>            "+
+"                </div>"+
+
+
+
 "          "+
 "            </div>"            
             )
@@ -154,7 +175,22 @@ function size (obj) {
             arrangeDots(setter);
         
             $(".slider").mousemove(function(event) {                                                
-                if (draggedElement == setter+"FactoryStartSlider") {
+                if (draggedElement == setter+"FactoryStartMinSlider") {
+                    changeShiftingRandomSetter(setter, "FactoryStart", "Min", (event.pageX-20)/400.0, event.pageX-20);
+                } else if (draggedElement == setter+"FactoryEndMinSlider") {
+                    changeShiftingRandomSetter(setter, "FactoryEnd", "Min", (event.pageX-20)/400.0, event.pageX-20);
+                } else if (draggedElement == setter+"ParticleEndMinSlider") {
+                    changeShiftingRandomSetter(setter, "ParticleEnd", "Min", (event.pageX-20)/400, event.pageX-20);
+				}
+                if (draggedElement == setter+"FactoryStartMaxSlider") {
+                    changeShiftingRandomSetter(setter, "FactoryStart", "Max", (event.pageX-20)/400.0, event.pageX-20);
+                } else if (draggedElement == setter+"FactoryEndMaxSlider") {
+                    changeShiftingRandomSetter(setter, "FactoryEnd", "Max", (event.pageX-20)/400.0, event.pageX-20);
+                } else if (draggedElement == setter+"ParticleEndMaxSlider") {
+                    changeShiftingRandomSetter(setter, "ParticleEnd", "Max", (event.pageX-20)/400, event.pageX-20);
+                }
+
+    			if (draggedElement == setter+"FactoryStartSlider") {
                     changeShiftingSetter(setter, "FactoryStart", (event.pageX-20)/400.0, event.pageX-20);
                 } else if (draggedElement == setter+"FactoryEndSlider") {
                     changeShiftingSetter(setter, "FactoryEnd", (event.pageX-20)/400.0, event.pageX-20);
@@ -202,7 +238,14 @@ function size (obj) {
                 changeSetter(setter, (event.pageX-20)/400.0, event.pageX-20);
                     addParticleSystem();                    
             });            
+
+			addRandomSliderListener(setter, "");
+			addRandomSliderListener(setter, "FactoryStart");
+			addRandomSliderListener(setter, "FactoryEnd");
+			addRandomSliderListener(setter, "ParticleEnd");
+
             
+			/*
             $("#"+setter+"RandomSlider").mousedown(function(event) {
                 
                 var distanceToMin = Math.abs(event.pageX - parseFloat($("#"+setter+"MinKnob").css("left")));
@@ -221,35 +264,126 @@ function size (obj) {
                     
                 }
             });
+					
+            $("#"+setter+"FactoryStartRandomSlider").mousedown(function(event) {
+                
+                var distanceToMin = Math.abs(event.pageX - parseFloat($("#"+setter+"FactoryStartMinKnob").css("left")));
+                var distanceToMax = Math.abs(event.pageX - parseFloat($("#"+setter+"FactoryStartMaxKnob").css("left")));
+                
+                
+                if (distanceToMin < distanceToMax) {
+                    draggedElement = setter+"FactoryStartMinSlider";                
+                    changeShiftingRandomSetter(setter, "FactoryStart", "Min", (event.pageX-20)/400.0, event.pageX-20);                    
+                    addParticleSystem();    
+                    
+                } else {
+                    draggedElement = setter+"FactoryStartMaxSlider";                
+                    changeShifitngRandomSetter(setter, "Max", (event.pageX-20)/400.0, event.pageX-20);                                    
+                    addParticleSystem();    
+                    
+                }
+            });
+
+            $("#"+setter+"RandomSlider").mousedown(function(event) {
+                
+                var distanceToMin = Math.abs(event.pageX - parseFloat($("#"+setter+"MinKnob").css("left")));
+                var distanceToMax = Math.abs(event.pageX - parseFloat($("#"+setter+"MaxKnob").css("left")));
+                
+                
+                if (distanceToMin < distanceToMax) {
+                    draggedElement = setter+"MinSlider";                
+                    changeRandomSetter(setter, "Min", (event.pageX-20)/400.0, event.pageX-20);                    
+                    addParticleSystem();    
+                    
+                } else {
+                    draggedElement = setter+"MaxSlider";                
+                    changeRandomSetter(setter, "Max", (event.pageX-20)/400.0, event.pageX-20);                                    
+                    addParticleSystem();    
+                    
+                }
+            });
+
+            $("#"+setter+"RandomSlider").mousedown(function(event) {
+                
+                var distanceToMin = Math.abs(event.pageX - parseFloat($("#"+setter+"MinKnob").css("left")));
+                var distanceToMax = Math.abs(event.pageX - parseFloat($("#"+setter+"MaxKnob").css("left")));
+                
+                
+                if (distanceToMin < distanceToMax) {
+                    draggedElement = setter+"MinSlider";                
+                    changeRandomSetter(setter, "Min", (event.pageX-20)/400.0, event.pageX-20);                    
+                    addParticleSystem();    
+                    
+                } else {
+                    draggedElement = setter+"MaxSlider";                
+                    changeRandomSetter(setter, "Max", (event.pageX-20)/400.0, event.pageX-20);                                    
+                    addParticleSystem();    
+                    
+                }
+            });*/			
             
             $(document).mouseup(function() {
                 draggedElement = false;
             });
             
             $("#"+setter+"ShiftingCheck").change(function() {
-                if ($("#"+setter+"ShiftingCheck").is(':checked')) {
-                    $("#"+setter+"SlidersShifting").css("display", "block");
-                    $("#"+setter+"Sliders").css("display", "none");                    
-                } else {
-                    $("#"+setter+"SlidersShifting").css("display", "none");
-                    $("#"+setter+"Sliders").css("display", "block");       
-                }
+			    showRightSliders(setter);
             });
             
             $("#"+setter+"RandomCheck").change(function() {
-                if ($("#"+setter+"RandomCheck").is(':checked')) {
-                    $("#"+setter+"Sliders").css("display", "none");                    
-                    $("#"+setter+"SlidersRandom").css("display", "block");                                        
+			    showRightSliders(setter);
+            });
+        }
+		
+	function addRandomSliderListener(setter, timeAxis) {
+            $("#"+setter+""+timeAxis+"RandomSlider").mousedown(function(event) {
+                
+                var distanceToMin = Math.abs(event.pageX - parseFloat($("#"+setter+""+timeAxis+"MinKnob").css("left")));
+                var distanceToMax = Math.abs(event.pageX - parseFloat($("#"+setter+""+timeAxis+"MaxKnob").css("left")));
+                
+                
+                if (distanceToMin < distanceToMax) {
+                    draggedElement = setter+""+timeAxis+"MinSlider";                
+					if (timeAxis == "") 
+                        changeRandomSetter(setter, "Min", (event.pageX-20)/400.0, event.pageX-20);                    
+					else
+                        changeShiftingRandomSetter(setter, timeAxis, "Min", (event.pageX-20)/400.0, event.pageX-20);                    					
+                    addParticleSystem();    
+                    
                 } else {
-                    $("#"+setter+"Sliders").css("display", "block");       
-                    $("#"+setter+"SlidersRandom").css("display", "none");                                                            
+                    draggedElement = setter+""+timeAxis+"MaxSlider";                
+					if (timeAxis == "") 
+                        changeRandomSetter(setter, "Max", (event.pageX-20)/400.0, event.pageX-20);                    
+					else
+                        changeShiftingRandomSetter(setter, timeAxis, "Max", (event.pageX-20)/400.0, event.pageX-20);                    					
+                    addParticleSystem();    
+                    
                 }
             });
-            
-            
-            
-            
-        }
+	
+	}
+		
+    function showRightSliders(setter) {
+	
+		$("#"+setter+"Sliders").css("display", "none");                    
+		$("#"+setter+"SlidersRandom").css("display", "none");                                        
+		$("#"+setter+"SlidersShifting").css("display", "none");                    
+		$("#"+setter+"SlidersRandomShifting").css("display", "none");                                        
+    	
+	
+		if ($("#"+setter+"RandomCheck").is(':checked')) {
+		    if ($("#"+setter+"ShiftingCheck").is(':checked'))
+			    $("#"+setter+"SlidersRandomShifting").css("display", "block");             
+		    else 
+			    $("#"+setter+"SlidersRandom").css("display", "block");             			    
+		} else {
+		    if ($("#"+setter+"ShiftingCheck").is(':checked'))
+			    $("#"+setter+"SlidersShifting").css("display", "block");             
+		    else 
+			    $("#"+setter+"Sliders").css("display", "block");             			    
+		}		
+				
+    }
         
   function createImageSetter() {
       /*$("#setters").append(
