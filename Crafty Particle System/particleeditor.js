@@ -480,7 +480,6 @@ function loadParticleSystemForEditor(file) {
 				for (k in data[mutables[i]][j]) {
 					modelSystem[mutables[i]][j][k] = data[mutables[i]][j][k];
 				}
-				modelSystem[mutables[i]].FactoryCurrent = {Min: data[mutables[i]].FactoryStart.Min, Max: data[mutables[i]].FactoryStart.Max};
 			}
 		
 		}        
