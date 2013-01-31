@@ -460,11 +460,34 @@ function createCollection(Crafty) {
             hideTabs();
             showTab("#container");
 			
-            Crafty("ParticleSystem").destroy();
-            Crafty("Particle").destroy();        
-            var system = Crafty.e("ParticleSystem").attr({x: 160, y: 120}).load(file+".json");   
+			loadParticleSystemForEditor(file+".json");
 		});
     }    		
+}
+
+function loadParticleSystemForEditor(file) {
+
+	Crafty("ParticleSystem").destroy();
+	Crafty("Particle").destroy();        
+	var system = Crafty.e("ParticleSystem").attr({x: 160, y: 120}).load(file);   
+
+
+	$.getJSON(file, function(data) {
+		for (i in mutables) {
+			modelSystem[mutables[i]] = {};
+			for (j in data[mutables[i]]) {
+				modelSystem[mutables[i]][j] = {};
+				for (k in data[mutables[i]][j]) {
+					modelSystem[mutables[i]][j][k] = data[mutables[i]][j][k];
+				}
+				modelSystem[mutables[i]].FactoryCurrent = {Min: data[mutables[i]].FactoryStart.Min, Max: data[mutables[i]].FactoryStart.Max};
+			}
+		
+		}        
+		
+		modelSystem.imageUsed = data.imageUsed;
+		modelSystem.imageName = data.imageName;
+	})
 }
 		
 $(document).ready(function() {

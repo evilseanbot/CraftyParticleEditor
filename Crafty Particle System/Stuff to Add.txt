@@ -1,5 +1,8 @@
 Features to add:
 =============================================
+* Edit from collection
+  - Have collection selection alter the knobs position.
+  - Have collection selection alter the setter type (Random/Shifting)
 * Fix black box at first colorsquare particle.
 * Sprite Animations!
 * Different Height/Width
