@@ -93,6 +93,10 @@
                display: none;
             }
 			
+			#collection {
+			   display: none;
+			}
+			
 			#viewScreenDiv {
 			    position: fixed;
 				border: 1px solid black;
@@ -102,7 +106,7 @@
     </head> 
     <body> 
         <div id='siteMenu'>
-            <span id='introTab'>Intro</span> | <span id='editorTab'>Editor</span>
+            <span id='introTab'>Intro</span> | <span id='editorTab'>Editor</span> | <span id='collectionTab'>Collection</span>
         </div>
         <br>
         <div id='intro'>
@@ -133,10 +137,13 @@
             <div id='viewScreenDiv'>
 				<button id='play'>PLAY</button>
 				<button id='stop'>STOP</button>
-				<button id='json'>JSON FILE</button>
-				<div id='jsoncode' style='display: none; float: left'></div>
-				
+				<button id='json'>JSON FILE</button>				
 				<div id="cr-stage" style="width: 640px; height: 480px; overflow: hidden; position: relative; background-color: black; background-position: initial initial; background-repeat: initial initial;"><div style="position: absolute; z-index: 1; -webkit-transform: scale(2, 2);"></div><canvas width="640" height="480" style="position: absolute; left: 0px; top: 0px;"></canvas></div>
 			</div>
+		</div>
+		<div id='collection'>
+		</div>
+		<div id='jsoncode' style='display: none; position: absolute; left: 0px; width: 300px; z-index: 100; background-color: white'>
+		</div>
     </body> 
 </html>

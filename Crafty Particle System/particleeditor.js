@@ -242,85 +242,7 @@ function size (obj) {
 			addRandomSliderListener(setter, "");
 			addRandomSliderListener(setter, "FactoryStart");
 			addRandomSliderListener(setter, "FactoryEnd");
-			addRandomSliderListener(setter, "ParticleEnd");
-
-            
-			/*
-            $("#"+setter+"RandomSlider").mousedown(function(event) {
-                
-                var distanceToMin = Math.abs(event.pageX - parseFloat($("#"+setter+"MinKnob").css("left")));
-                var distanceToMax = Math.abs(event.pageX - parseFloat($("#"+setter+"MaxKnob").css("left")));
-                
-                
-                if (distanceToMin < distanceToMax) {
-                    draggedElement = setter+"MinSlider";                
-                    changeRandomSetter(setter, "Min", (event.pageX-20)/400.0, event.pageX-20);                    
-                    addParticleSystem();    
-                    
-                } else {
-                    draggedElement = setter+"MaxSlider";                
-                    changeRandomSetter(setter, "Max", (event.pageX-20)/400.0, event.pageX-20);                                    
-                    addParticleSystem();    
-                    
-                }
-            });
-					
-            $("#"+setter+"FactoryStartRandomSlider").mousedown(function(event) {
-                
-                var distanceToMin = Math.abs(event.pageX - parseFloat($("#"+setter+"FactoryStartMinKnob").css("left")));
-                var distanceToMax = Math.abs(event.pageX - parseFloat($("#"+setter+"FactoryStartMaxKnob").css("left")));
-                
-                
-                if (distanceToMin < distanceToMax) {
-                    draggedElement = setter+"FactoryStartMinSlider";                
-                    changeShiftingRandomSetter(setter, "FactoryStart", "Min", (event.pageX-20)/400.0, event.pageX-20);                    
-                    addParticleSystem();    
-                    
-                } else {
-                    draggedElement = setter+"FactoryStartMaxSlider";                
-                    changeShifitngRandomSetter(setter, "Max", (event.pageX-20)/400.0, event.pageX-20);                                    
-                    addParticleSystem();    
-                    
-                }
-            });
-
-            $("#"+setter+"RandomSlider").mousedown(function(event) {
-                
-                var distanceToMin = Math.abs(event.pageX - parseFloat($("#"+setter+"MinKnob").css("left")));
-                var distanceToMax = Math.abs(event.pageX - parseFloat($("#"+setter+"MaxKnob").css("left")));
-                
-                
-                if (distanceToMin < distanceToMax) {
-                    draggedElement = setter+"MinSlider";                
-                    changeRandomSetter(setter, "Min", (event.pageX-20)/400.0, event.pageX-20);                    
-                    addParticleSystem();    
-                    
-                } else {
-                    draggedElement = setter+"MaxSlider";                
-                    changeRandomSetter(setter, "Max", (event.pageX-20)/400.0, event.pageX-20);                                    
-                    addParticleSystem();    
-                    
-                }
-            });
-
-            $("#"+setter+"RandomSlider").mousedown(function(event) {
-                
-                var distanceToMin = Math.abs(event.pageX - parseFloat($("#"+setter+"MinKnob").css("left")));
-                var distanceToMax = Math.abs(event.pageX - parseFloat($("#"+setter+"MaxKnob").css("left")));
-                
-                
-                if (distanceToMin < distanceToMax) {
-                    draggedElement = setter+"MinSlider";                
-                    changeRandomSetter(setter, "Min", (event.pageX-20)/400.0, event.pageX-20);                    
-                    addParticleSystem();    
-                    
-                } else {
-                    draggedElement = setter+"MaxSlider";                
-                    changeRandomSetter(setter, "Max", (event.pageX-20)/400.0, event.pageX-20);                                    
-                    addParticleSystem();    
-                    
-                }
-            });*/			
+			addRandomSliderListener(setter, "ParticleEnd");			
             
             $(document).mouseup(function() {
                 draggedElement = false;
@@ -500,6 +422,7 @@ function showTab(id) {
 function hideTabs() {
   $("#intro").css("display", "none");
   $("#container").css("display", "none");
+  $("#collection").css("display", "none");
 }
 
 function readURL(input, Crafty) {
@@ -522,11 +445,32 @@ function loadUploadedImage() {
     }
 }
         
+function createCollection(Crafty) {
+    var jsonFiles = {firePlace: 0, snowDig: 0};
+    
+    for (file in jsonFiles) {
+        $("#collection").append("<br><span id='"+file+"'>"+file+"</span>");
+	}
+	
+	
+	for (jfile in jsonFiles) {
+		$("#"+jfile).click(function(e) {
+		    var file = e.target.id;
+		
+            hideTabs();
+            showTab("#container");
+			
+            Crafty("ParticleSystem").destroy();
+            Crafty("Particle").destroy();        
+            var system = Crafty.e("ParticleSystem").attr({x: 160, y: 120}).load(file+".json");   
+		});
+    }    		
+}
+		
 $(document).ready(function() {
 
   // Initialize Crafty
-  Crafty.init(640, // 640 Pixels Wide
-              480  // 480 Pixels Tall
+  Crafty.init(640, 480// 640 Pixels Wide
               );
               
   Crafty.canvas.init(); // Create a Canvas Element 
@@ -564,6 +508,11 @@ $(document).ready(function() {
     hideTabs();
     showTab("#container");
   });
+
+  $("#collectionTab").click(function() { 
+    hideTabs();
+    showTab("#collection");
+  });
   
   
   $(".setter").change(function() {
@@ -575,6 +524,7 @@ $(document).ready(function() {
   for (i in mutables) {
       createSetter(mutables[i], mutableBottomValues[mutables[i]], mutableTopValues[mutables[i]]);
   }    
+  createCollection(Crafty);
   
   $("#setters").append("<img id='preview' src=''>");
   

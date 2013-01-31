@@ -59,7 +59,7 @@ Crafty.c("Particle", {
         var blue = hsvColor["blue"].toString(16);
         
         // Adjust this for image + non-image versions in future.        
-        if (entity.imageUsed) {
+        if (entity.imageUsed && entity.imageUsed != "false") {
             //this.spriteColor("#" + red + "" + green + "" + blue, 1);
         } else {
             entity.color("#" + red + "" + green + "" + blue);
@@ -67,9 +67,7 @@ Crafty.c("Particle", {
     
     },
     init: function() {    
-    
-      //this.setColor(this);
-    
+	    
       this.bind("EnterFrame", function() {
 
 
@@ -190,10 +188,10 @@ Crafty.c("ParticleSystem", {
           if (entity.imageUsed && entity.imageUsed != "false") {                    
               var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, SpriteColor, " + entity.imageName);
               particle.imageUsed = entity.imageUsed;
-			  console.log("Image is used");
           } else {
-              var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, Color")              
+              var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, Color");
           }
+		  		  		  
           particle.attr({x: randomSet.X + entity.x, 
               y: randomSet.Y + entity.y, 
               z: entity.z, 

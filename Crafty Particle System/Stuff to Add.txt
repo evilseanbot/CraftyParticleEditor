@@ -7,7 +7,7 @@ Features to add:
   - You have this in the json button, but you need to add quotes around any words.
 * Changeable backgrounds
 * Multiple emitters.
-* Zoomable button!
+* Zoomable button!+
 * Save to site.
 * Organization of site systems:
   - Search system.
