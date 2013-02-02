@@ -265,7 +265,7 @@ Crafty.c("ParticleSystem", {
           while (this.emitsDue > 1) {
               createParticle(this);
               this.emitsDue -= 1.0;              
-              this.emitsPerSecond = randomValue(this.EmitsPerSecond.FactoryStart);
+              this.emitsPerSecond = randomValue(this.EmitsPerSecond.FactoryCurrent);
           }          
       });      
     }
