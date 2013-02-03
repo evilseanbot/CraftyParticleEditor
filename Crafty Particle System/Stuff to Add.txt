@@ -1,13 +1,10 @@
 Features to add:
 =============================================
-* Edit from collection
-  - Have collection selection alter the knobs position.
-  - Have collection selection alter the setter type (Random/Shifting)
 * Fix black box at first colorsquare particle.
 * Sprite Animations!
 * Different Height/Width
 * Export to .json!
-  - You have this in the json button, but you need to add quotes around any words.
+  - You have this in the json button, but you it would be nice to download as file, too.
 * Changeable backgrounds
 * Multiple emitters.
 * Zoomable button!+

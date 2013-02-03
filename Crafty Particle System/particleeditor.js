@@ -20,6 +20,9 @@ for (i in mutables) {
 
 modelSystem.imageUsed = false;
 modelSystem.imageName = "img";
+modelSystem.fileName = "file";
+
+syncSetters();
 
 function size (obj) {
     var size = 0, key;
@@ -446,23 +449,37 @@ function loadUploadedImage() {
 }
         
 function createCollection(Crafty) {
-    var jsonFiles = {firePlace: 0, snowDig: 0};
-    
-    for (file in jsonFiles) {
-        $("#collection").append("<br><span id='"+file+"'>"+file+"</span>");
-	}
-	
-	
-	for (jfile in jsonFiles) {
-		$("#"+jfile).click(function(e) {
-		    var file = e.target.id;
+    $("#collection").html("");
+
+    var jsonFiles;
+
+	$.ajax({
+	  url: "readdir.php",
+	  context: document.body
+	}).done(function(data) {
+    	jsonFiles = data.split("\n");
+        jsonFiles.pop();
 		
-            hideTabs();
-            showTab("#container");
+		for (i in jsonFiles) {
+			$("#collection").append("<br><span id='"+jsonFiles[i]+"'>"+jsonFiles[i]+"</span>");
+		}
+
+		
+	   
+		for (i in jsonFiles) {
+			$("#"+jsonFiles[i]).click(function(e) {
+				var file = e.target.id;
 			
-			loadParticleSystemForEditor(file+".json");
-		});
-    }    		
+				hideTabs();
+				showTab("#container");
+				
+				loadParticleSystemForEditor("json/"+file+".json");
+			});
+		}    		
+
+	});    
+	
+	
 }
 
 function loadParticleSystemForEditor(file) {
@@ -486,7 +503,93 @@ function loadParticleSystemForEditor(file) {
 		
 		modelSystem.imageUsed = data.imageUsed;
 		modelSystem.imageName = data.imageName;
-	})
+		modelSystem.fileName = data.fileName;
+		
+		$("#fileName").val(modelSystem.fileName);
+
+
+    	syncSetters();
+		
+	})	
+}
+		
+function syncSetters() {
+    for (i in mutables) {
+	    var shifting = false;
+		var random = false;
+        if (modelSystem[mutables[i]].FactoryStart.Min != modelSystem[mutables[i]].FactoryEnd.Min || 
+		    modelSystem[mutables[i]].FactoryStart.Max != modelSystem[mutables[i]].FactoryEnd.Max ||
+		    modelSystem[mutables[i]].ParticleEnd.Min != 0 || 
+			modelSystem[mutables[i]].ParticleEnd.Max != 0 ) {
+						
+		    shifting = true;
+			$("#"+mutables[i]+"ShiftingCheck").attr("checked", "checked");
+		} else {
+			$("#"+mutables[i]+"ShiftingCheck").attr("checked", false);		
+		}
+		
+        if (modelSystem[mutables[i]].FactoryStart.Min != modelSystem[mutables[i]].FactoryStart.Max || 
+		    modelSystem[mutables[i]].FactoryEnd.Min != modelSystem[mutables[i]].FactoryEnd.Max ||
+		    modelSystem[mutables[i]].ParticleEnd.Min != modelSystem[mutables[i]].ParticleEnd.Max) {
+						
+		    random = true;
+			$("#"+mutables[i]+"RandomCheck").attr("checked", "checked");
+		} else {
+			$("#"+mutables[i]+"RandomCheck").attr("checked", false);				
+		}
+		
+				
+		showRightSliders(mutables[i]);
+		
+		var mutableRange = mutableTopValues[mutables[i]] - mutableBottomValues[mutables[i]];
+		
+		if (shifting == false) {
+		    if (random == false) {
+    		    var knobPos = ((modelSystem[mutables[i]].FactoryStart.Min-mutableBottomValues[mutables[i]]) / mutableRange)* 400.0
+                $("#"+mutables[i]+"Knob").css("left", knobPos);
+		    } else {
+    		    var knobPos = ((modelSystem[mutables[i]].FactoryStart.Min-mutableBottomValues[mutables[i]]) / mutableRange) * 400.0
+                $("#"+mutables[i]+"MinKnob").css("left", knobPos);			
+    		    knobPos = (((modelSystem[mutables[i]].FactoryStart.Max-mutableBottomValues[mutables[i]]) / mutableRange) * 400.0) + 10;
+                $("#"+mutables[i]+"MaxKnob").css("left", knobPos);							
+			}
+		} else {
+            if (random == false) {		
+				var knobPos = ((modelSystem[mutables[i]].FactoryStart.Min-mutableBottomValues[mutables[i]])  / mutableRange) * 400.0
+				$("#"+mutables[i]+"FactoryStartKnob").css("left", knobPos);
+				knobPos = ((modelSystem[mutables[i]].FactoryEnd.Min-mutableBottomValues[mutables[i]])  / mutableRange) * 400.0
+				$("#"+mutables[i]+"FactoryEndKnob").css("left", knobPos);
+				knobPos = (((modelSystem[mutables[i]].ParticleEnd.Min-mutableBottomValues[mutables[i]])  / mutableRange) * 200.0) + 200;
+				$("#"+mutables[i]+"ParticleEndKnob").css("left", knobPos);			
+			} else {
+				var knobPos = ((modelSystem[mutables[i]].FactoryStart.Min-mutableBottomValues[mutables[i]])  / mutableRange) * 400.0
+				$("#"+mutables[i]+"FactoryStartMinKnob").css("left", knobPos);
+				knobPos = ((modelSystem[mutables[i]].FactoryEnd.Min-mutableBottomValues[mutables[i]])  / mutableRange) * 400.0
+				$("#"+mutables[i]+"FactoryEndMinKnob").css("left", knobPos);
+				knobPos = (((modelSystem[mutables[i]].ParticleEnd.Min-mutableBottomValues[mutables[i]])  / mutableRange) * 200.0) + 200;
+				$("#"+mutables[i]+"ParticleEndMinKnob").css("left", knobPos);			
+
+				knobPos = (((modelSystem[mutables[i]].FactoryStart.Max-mutableBottomValues[mutables[i]])  / mutableRange) * 400.0) + 10;
+				$("#"+mutables[i]+"FactoryStartMaxKnob").css("left", knobPos);
+				knobPos = (((modelSystem[mutables[i]].FactoryEnd.Max-mutableBottomValues[mutables[i]])  / mutableRange) * 400.0) + 10;
+				$("#"+mutables[i]+"FactoryEndMaxKnob").css("left", knobPos);
+				knobPos = (((modelSystem[mutables[i]].ParticleEnd.Max-mutableBottomValues[mutables[i]])  / mutableRange) * 200.0) + 210;
+				$("#"+mutables[i]+"ParticleEndMaxKnob").css("left", knobPos);			
+				
+			
+			}
+		}
+		
+		arrangeDots(mutables[i]);
+    }	
+}		
+
+function getModelJson() {
+    var string = JSON.stringify(modelSystem);
+//    var string ="";
+//	string += "{\n";
+//	string += "}";
+	return string;
 }
 		
 $(document).ready(function() {
@@ -521,6 +624,19 @@ $(document).ready(function() {
       }
   });
   
+  $("#share").click(function() {
+      $.ajax({
+            type: "POST",
+            url: "jsonwriter.php?fileName="+modelSystem.fileName,
+            dataType: 'json',
+            data: { json: getModelJson() }
+        });
+  });
+  
+  $("#fileName").change(function() {
+      modelSystem.fileName = $("#fileName").val();
+  });
+  
   $("#introTab").click(function() { 
     hideTabs();
     showTab("#intro");
@@ -534,6 +650,7 @@ $(document).ready(function() {
   $("#collectionTab").click(function() { 
     hideTabs();
     showTab("#collection");
+	createCollection(Crafty);
   });
   
   
