@@ -8,7 +8,6 @@ Features to add:
 * Changeable backgrounds
 * Multiple emitters.
 * Zoomable button!+
-* Save to site.
 * Organization of site systems:
   - Search system.
   - Tag system
@@ -16,7 +15,7 @@ Features to add:
 * Add line-dots for random-shifting sliders.
 * SpriteColor support. (ColorAlpha setting)
   - Seems to be some bug with Sprite Color (:/)
-
+* GET variables that will direct people to specific particle effects.
   
 On hold:
-* Velocity Sliders {May extend upon ability to handle}
+* Velocity Sliders {May exceed complexity able to handle}

@@ -60,7 +60,7 @@ Crafty.c("Particle", {
         
         // Adjust this for image + non-image versions in future.        
         if (entity.imageUsed && entity.imageUsed != "false") {
-            //this.spriteColor("#" + red + "" + green + "" + blue, 1);
+           //entity.spriteColor("#" + red + "" + green + "" + blue, 1);
         } else {
             entity.color("#" + red + "" + green + "" + blue);
         }

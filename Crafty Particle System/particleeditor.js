@@ -376,17 +376,21 @@ function size (obj) {
   
       $("#jsoncode").html("{<br>");
       for (i in modelSystem) {
+ 	      i = i.replace(/[`~!@#$%^&*()|+\-=?;:',.<>\{\}\[\]\\\/]/gi, '');
       
           if (typeof(modelSystem[i]) == "object") {
               $("#jsoncode").append(space(4)+"\""+i+"\": {<br>");             
               
               jindex = 0;          
               for (j in modelSystem[i]) {
+			      j = j.replace(/[`~!@#$%^&*()|+\-=?;:',.<>\{\}\[\]\\\/]/gi, '');
                   $("#jsoncode").append(space(8)+"\""+j+"\": {<br>");              
                   
                   
                   kindex = 0;
                   for (k in modelSystem[i][j]) {
+			          k = k.replace(/[`~!@#$%^&*()|+\-=?;:',.<>\{\}\[\]\\\/]/gi, '');				  
+		              if (typeof modelSystem[i][j][k] == "string") {modelSystem[i][j][k] = modelSystem[i][j][k].replace(/[`~!@#$%^&*()|+\-=?;:',.<>\{\}\[\]\\\/]/gi, '');}
                       $("#jsoncode").append(space(12)+"\""+k+"\": "+modelSystem[i][j][k]);              
                       
                       kindex++;
@@ -405,6 +409,7 @@ function size (obj) {
               }
               $("#jsoncode").append(space(4) + "}");          
           } else {
+		      if (typeof modelSystem[i] == "string") {modelSystem[i] = modelSystem[i].replace(/[`~!@#$%^&*()|+\-=?;:',.<>\{\}\[\]\\\/]/gi, '');}
               $("#jsoncode").append(space(4)+"\""+i+"\": \"" + modelSystem[i] + "\"");              
           }
           iindex++;
@@ -602,7 +607,7 @@ $(document).ready(function() {
 
   Crafty.background("black");
 
-  Crafty.viewport.scale(2);  
+  //Crafty.viewport.scale(2);  
   
   addParticleSystem();
   
