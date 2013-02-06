@@ -472,7 +472,7 @@ function createCollection(Crafty) {
 		
 	   
 		for (i in jsonFiles) {
-			$("#"+jsonFiles[i]).click(function(e) {
+			$("[id='"+jsonFiles[i]+"']").click(function(e) {
 				var file = e.target.id;
 			
 				hideTabs();
@@ -607,7 +607,7 @@ $(document).ready(function() {
 
   Crafty.background("black");
 
-  //Crafty.viewport.scale(2);  
+  Crafty.viewport.scale(2);  
   
   addParticleSystem();
   

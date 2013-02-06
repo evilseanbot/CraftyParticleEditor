@@ -51,48 +51,45 @@ Crafty.c("Particle", {
     framesExisted: 0,
     lifetime: 60,
     imageUsed: false, 
-    setColor: function(entity) {
-        var hsvColor = hsv2rgb(entity.HueCurrent, entity.SaturationCurrent, entity.BrightnessCurrent);
+	mutables: {Angle: 0, Speed: 0, Hue: 0, Saturation: 0, Brightness: 0},
+    setColor: function() {
+        var hsvColor = hsv2rgb(this.Hue.Current, this.Saturation.Current, this.Brightness.Current);
         
         var red = hsvColor["red"].toString(16);
         var green = hsvColor["green"].toString(16);
         var blue = hsvColor["blue"].toString(16);
         
         // Adjust this for image + non-image versions in future.        
-        if (entity.imageUsed && entity.imageUsed != "false") {
+        if (this.imageUsed && this.imageUsed != "false") {
            //entity.spriteColor("#" + red + "" + green + "" + blue, 1);
         } else {
-            entity.color("#" + red + "" + green + "" + blue);
+            this.color("#" + red + "" + green + "" + blue);
         }
     
     },
+	updateMutable: function(mutable) {
+          var delta = (mutable.End - mutable.Start) / this.lifetime;         
+          mutable.Current += delta;
+	},
     init: function() {    
 	    
+	  for (i in this.mutables) {
+	      this[i] = {};
+		  this[i].Current = 0;
+		  this[i].Start = 0;
+		  this[i].End = 0;
+      }	  
+	  		
       this.bind("EnterFrame", function() {
 
-
-      
-        // Should eventually make this serialized, like the mutables.
-        var delta = (this.AngleEnd - this.AngleStart) / this.lifetime;         
-        this.AngleCurrent += delta;
-        
-        var delta = (this.SpeedEnd - this.SpeedStart) / this.lifetime;         
-        this.SpeedCurrent += delta;
-
-        var delta = (this.HueEnd - this.HueStart) / this.lifetime;         
-        this.HueCurrent += delta;
-
-        var delta = (this.SaturationEnd - this.SaturationStart) / this.lifetime;         
-        this.SaturationCurrent += delta;
-
-        var delta = (this.BrightnessEnd - this.BrightnessStart) / this.lifetime;         
-        this.BrightnessCurrent += delta;
-        
+	      for (i in this.mutables) {
+		      this.updateMutable(this[i]);
+		  }
+        		
         this.setColor(this);
-        
         var radToDegrees = 57.2957795;
-        this._movement.x = Math.cos(this.AngleCurrent/radToDegrees)*this.SpeedCurrent;
-        this._movement.y = Math.sin(this.AngleCurrent/radToDegrees)*this.SpeedCurrent;
+        this._movement.x = Math.cos(this.Angle.Current/radToDegrees)*this.Speed.Current;
+        this._movement.y = Math.sin(this.Angle.Current/radToDegrees)*this.Speed.Current;
                 
         this.framesExisted++;              
                 
@@ -144,22 +141,52 @@ Crafty.c("ParticleSystem", {
         .complete(function(jqXHR, textStatus, errorThrown) {
             console.log("complete " + textStatus);
             //console.log("incoming Text " + jqXHR.responseText);
-        });
-        /*$.ajax({
-            url: 'testParticle.json',
-            dataType: 'json',
-            success: function( data ) {
-              alert( "SUCCESS:  " + data );
-            },
-            error: function( data ) {
-              alert( "ERROR:  ");
-              for (i in data) {
-                  console.log(i + ": " +data[i]);
-              }
-            }
-          });*/        
-        
+        });      
     },
+	createParticle: function() {
+          var randomSet = {};
+          var randomParticleEndSet = {};
+
+          for (i in this.mutables) {
+              randomSet[this.mutables[i]] = this.randomValue(this[this.mutables[i]].FactoryCurrent);
+              randomParticleEndSet[this.mutables[i]] = randomSet[this.mutables[i]] + this.randomValue(this[this.mutables[i]].ParticleEnd);
+          }       
+                  
+          if (this.imageUsed && this.imageUsed != "false") {                    
+              var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, SpriteColor, " + this.imageName);
+              particle.imageUsed = this.imageUsed;
+          } else {
+              var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, Color");
+          }
+		  		  		  
+          particle.attr({x: randomSet.X + this.x, 
+              y: randomSet.Y + this.y, 
+              z: this.z, 
+              h: randomSet.Height, 
+              w: randomSet.Height, 
+              rotation: randomSet.Rotation,
+              alpha: randomSet.Alpha })
+          .multiway(1, {})
+          .origin("center");
+
+          particle.lifetime = randomSet.ParticleLifetime;
+          particle.imageUsed = this.imageUsed;
+                    
+          particle.tween({alpha: randomParticleEndSet.Alpha, 
+              h: randomParticleEndSet.Height, 
+              w: randomParticleEndSet.Height, 
+              x: randomParticleEndSet.X + this.x,
+              y: randomParticleEndSet.Y + this.y,
+              rotation: randomParticleEndSet.Rotation
+          }, parseInt(particle.lifetime));                    
+                   
+		  for (i in particle.mutables) {
+		      particle[i].Start = randomSet[i];
+			  particle[i].Current = particle[i].Start;
+			  particle[i].End = randomParticleEndSet[i];
+		  }
+	
+	},
     init: function()  {
       this.addComponent("2D")
         .addComponent("Canvas")
@@ -169,71 +196,6 @@ Crafty.c("ParticleSystem", {
           this[this.mutables[i]] = {FactoryStart: {Min: 0, Max: 1}, FactoryEnd: {Min: 0, Max: 1}, FactoryCurrent: {Min: 0, Max: 1}, ParticleEnd: {Min: 0, Max: 1} };
       }              
       
-      function randomValue(range) {
-          var rangeWidth = range.Max - range.Min;
-          var randomFraction = (Math.random()*1000.0)/1000.0;
-          return (randomFraction * rangeWidth) + range.Min;
-      }
-
-      function createParticle(entity) {       
-
-          var randomSet = {};
-          var randomParticleEndSet = {};
-
-          for (i in entity.mutables) {
-              randomSet[entity.mutables[i]] = randomValue(entity[entity.mutables[i]].FactoryCurrent);
-              randomParticleEndSet[entity.mutables[i]] = randomSet[entity.mutables[i]] + randomValue(entity[entity.mutables[i]].ParticleEnd);
-          }       
-                  
-          if (entity.imageUsed && entity.imageUsed != "false") {                    
-              var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, SpriteColor, " + entity.imageName);
-              particle.imageUsed = entity.imageUsed;
-          } else {
-              var particle = Crafty.e("2D, Canvas, Multiway, Particle, Tween, Color");
-          }
-		  		  		  
-          particle.attr({x: randomSet.X + entity.x, 
-              y: randomSet.Y + entity.y, 
-              z: entity.z, 
-              h: randomSet.Height, 
-              w: randomSet.Height, 
-              rotation: randomSet.Rotation,
-              alpha: randomSet.Alpha })
-          .multiway(1, {})
-          .origin("center");
-
-          particle.lifetime = randomSet.ParticleLifetime;
-          particle.imageUsed = entity.imageUsed;
-                    
-          particle.tween({alpha: randomParticleEndSet.Alpha, 
-              h: randomParticleEndSet.Height, 
-              w: randomParticleEndSet.Height, 
-              x: randomParticleEndSet.X + entity.x,
-              y: randomParticleEndSet.Y + entity.y,
-              rotation: randomParticleEndSet.Rotation
-          }, parseInt(particle.lifetime));                    
-                    
-          particle.AngleStart = randomSet.Angle;
-          particle.AngleCurrent = particle.AngleStart;          
-          particle.AngleEnd = randomParticleEndSet.Angle;
-                    
-          particle.SpeedStart = randomSet.Speed;
-          particle.SpeedCurrent = particle.SpeedStart;          
-          particle.SpeedEnd = randomParticleEndSet.Speed;                              
-          
-          particle.HueStart = randomSet.Hue;
-          particle.HueCurrent = particle.HueStart;          
-          particle.HueEnd = randomParticleEndSet.Hue;                              
-
-          particle.SaturationStart = randomSet.Saturation;
-          particle.SaturationCurrent = particle.SaturationStart;          
-          particle.SaturationEnd = randomParticleEndSet.Saturation;                              
-
-          particle.BrightnessStart = randomSet.Brightness;
-          particle.BrightnessCurrent = particle.BrightnessStart;          
-          particle.BrightnessEnd = randomParticleEndSet.Brightness;                              
-          
-       }      
        
       function updateMutable(entity, mutable) {
           var MinDelta = (mutable.FactoryEnd.Min - mutable.FactoryStart.Min) / entity.lifetime;         
@@ -245,7 +207,7 @@ Crafty.c("ParticleSystem", {
       }
       
       function realParticleEnd(mutable) {
-          return randomValue(mutable.FactoryCurrent) + randomValue(mutable.ParticleEnd);
+          return this.randomValue(mutable.FactoryCurrent) + this.randomValue(mutable.ParticleEnd);
       }
                 
       this.bind("EnterFrame", function() {
@@ -263,9 +225,9 @@ Crafty.c("ParticleSystem", {
 		  this.emitsDue += (this.emitsPerSecond / 60.0);		
                               
           while (this.emitsDue > 1) {
-              createParticle(this);
+              this.createParticle();
               this.emitsDue -= 1.0;              
-              this.emitsPerSecond = randomValue(this.EmitsPerSecond.FactoryCurrent);
+              this.emitsPerSecond = this.randomValue(this.EmitsPerSecond.FactoryCurrent);
           }          
       });      
     }

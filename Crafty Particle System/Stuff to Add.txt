@@ -8,10 +8,6 @@ Features to add:
 * Changeable backgrounds
 * Multiple emitters.
 * Zoomable button!+
-* Organization of site systems:
-  - Search system.
-  - Tag system
-  - Ratings
 * Add line-dots for random-shifting sliders.
 * SpriteColor support. (ColorAlpha setting)
   - Seems to be some bug with Sprite Color (:/)
@@ -19,3 +15,8 @@ Features to add:
   
 On hold:
 * Velocity Sliders {May exceed complexity able to handle}
+
+* Organization of site systems:
+  - Search system. (Needed with 100+ entries)
+  - Tag system (Needed/useful with 1000+ entries)
+  - Ratings (Need with 100+ entries)
